@@ -1,0 +1,89 @@
+#! /usr/bin/expect
+
+# Last update: Tue Aug  3 11:35:35 JST 2021
+
+# See also:
+# https://linuxjm.osdn.jp/html/expect/man1/expect.1.html
+# https://www.atmarkit.co.jp/fnetwork/rensai/netpro07/pop3-commands.html
+
+# ----------------------------------------------------------
+
+set pop_host localhost
+set pop_port 55110
+set pop_user "your_username"
+set pop_pass "DUMMY_PASS"
+
+set n_now 15
+set n_end 25
+
+set timeout 2
+
+# ----------------------------------------------------------
+
+# start telnet to access pop server
+spawn /usr/local/bin/telnet ${pop_host} ${pop_port}
+
+# wait for the response from the pop server then send a user name
+expect {
+  "+OK" { send "user ${pop_user}\n" }
+}
+
+# wait for the resopnse and if it failed, then quit from the script 
+expect {
+  -re "(\\+OK)"  { exp_continue }
+  -re "(\\"ERR)" { puts "--- interactive mode (1) ---"; interact; exit 0 }
+}
+
+# wait for the user action (entering password)
+set timeout 30
+stty -echo
+send_user "Password: "
+expect_user -re "(.*)\n"
+set pass $expect_out(1,string)
+set pass_len [ string length $pass ]
+if { $pass_len > 0 } {
+  set pop_pass $pass
+}
+stty echo
+puts "\n"
+set timeout 2
+
+# send the password to the pop server
+# puts "sending password... ${pop_pass}\n"
+puts "sending password...\n"
+log_user 0
+send "pass ${pop_pass}\n"
+log_user 1
+
+# if it is ready to access the pop server, then try the stat command
+expect {
+  -re "(\\+OK)"  { send "stat\n" }
+  -re "(\\-ERR)" { puts "--- interactive mode (2) ---"; interact; exit 0 }
+}
+
+
+# main part...
+while {${n_now} <= ${n_end}  } {
+  expect {
+    # choose and activate one of three lines below:
+    -re "(\\+OK|\\-ERR)" { send "uidl ${n_now}\n" }
+    # -re "(\\+OK|\\-ERR)" { send "dele ${n_now}\n" }
+    # -re "(\\+OK|\\-ERR)" { send "top ${n_now} 1\n" }
+    # --------
+    # Do not delete any of the following two lines
+    -re "(closed)" { puts "aborted\n"; exit 1 }
+    -re "(failed)" { puts "aborted\n"; exit 1 }
+  }
+  incr n_now 1
+}
+
+# show the result
+expect {
+  -re "(\\+OK|\\-ERR)" { send "stat\n"; }
+}
+
+# done!
+expect {
+  -re "(\\+OK|\\-ERR)" { puts "--- interactive mode (3) ---"; interact; }
+}
+
