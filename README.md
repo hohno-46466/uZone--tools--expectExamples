@@ -1,2 +1,5 @@
-# uZone--tools--expectExamples
+# GitHub/uZone--tools--expectExamples
+
 Examples on expect (and tcl)
+
+-EOF-
