@@ -2,12 +2,12 @@
 
 Examples on expect (and tcl)
 
-    ./uZone--tools--expectExamples
+     ./uZone--tools--expectExamples
      ├──  README.md
      ├──  README.md.old
      └──  expect-test.expect
      
-     0 directories, 3 files (Mon Sep  5 19:33:10 JST 2022)
+     0 directories, 3 files (Fri Sep  9 06:46:39 JST 2022)
 
 
 Examples on expect (and tcl)
