@@ -7,7 +7,7 @@ Examples on expect (and tcl)
      ├──  README.md.old
      └──  expect-test.expect
      
-     0 directories, 3 files (Sat Nov  5 18:18:03 JST 2022)
+     0 directories, 3 files (Sat Nov 12 00:17:09 JST 2022)
 
 
 Examples on expect (and tcl)
