@@ -8,7 +8,7 @@ Examples on expect (and tcl)
      ├──  expect-test.expect
      └──  expect-test.expect.bak
      
-     0 directories, 4 files (Thu Dec 22 04:09:41 JST 2022)
+     0 directories, 4 files (Tue Dec 27 22:47:14 JST 2022)
 
 
 Examples on expect (and tcl)
